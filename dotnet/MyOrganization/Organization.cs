@@ -26,7 +26,26 @@ namespace MyOrganization
          */
         public Position? Hire(Name person, string title)
         {
-            //your code here
+            //Added code for the Hiring fuctionality
+            return FindAndHire(root, person, title);
+        }
+        
+        private Position? FindAndHire(Position position, Name person, string title)
+        {
+            if (position.GetTitle() == title && !position.IsFilled())
+            {
+                Employee employee = new Employee(position.GetHashCode(), person);
+                position.SetEmployee(employee);
+                return position;
+            }
+
+            foreach (Position directReport in position.GetDirectReports())
+            {
+                Position? hiredPosition = FindAndHire(directReport, person, title);
+                if (hiredPosition != null)
+                    return hiredPosition;
+            }
+
             return null;
         }
 
